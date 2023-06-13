@@ -102,7 +102,7 @@ textarea {
   display: inline-block;
   background-color: #2093ff;
   border: 0;
-  font-size: 14px;
+  font-size: 19px;
   text-transform: uppercase;
   padding: 10px 15px;
   color: #fff;
@@ -110,10 +110,12 @@ textarea {
   margin: 0 10px 0 0;
 }
 .btn-start {
-  background-color: #ff4756;
+  /*background-color: #55ADFB;*/
+  background-color: #3155A5;
 }
 .btn-stop {
-  background-color: #46c93a;
+  /*background-color: #9C68EA;*/
+  background-color: #9064CA;
 }
 .btn-reset {
   background-color: #1e1e1e;

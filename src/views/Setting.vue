@@ -1,41 +1,41 @@
 <template>
   <div class="container">
 
-    <h1>Setting</h1>
+    <h1>Configuración</h1>
     <div class="form-item">
-      <label>Title of competition</label>
-      <input id="title" type="text" v-model="title" placeholder="Name competition">
+      <label>Título</label>
+      <input id="title" type="text" v-model="title" placeholder="Título o nombre de la competencia">
       <div class="error" v-if="errors.title.length">{{ errors.title }}</div>
     </div>
 
     <div class="form-item">
-      <label>Description of competition</label>
-      <textarea id="description" v-model="description" placeholder="Your description"></textarea>
+      <label>Descripción de la competencia</label>
+      <textarea id="description" v-model="description" placeholder="Descripción"></textarea>
     </div>
 
     <div class="form-item">
-        <label><input type="radio" v-model="typeSource" name="typeSource" value="list">Write custom list</label>
-        <label><input type="radio" v-model="typeSource" name="typeSource" value="external">External JSON URL</label>
+        <label><input type="radio" v-model="typeSource" name="typeSource" value="list">Escribe la lista de participantes</label>
+        <label><input type="radio" v-model="typeSource" name="typeSource" value="external">JSON URL Externa</label>
         <br><br>  
         
         <div v-if="typeSource === 'list'">
-          <label>List of contestants</label>
-          <textarea class="list" v-model="contestants" rows="10"></textarea>
-          <br><small>Each record must be on a new line</small>
+          <label>List of participantes</label>
+          <textarea class="list" v-model="contestants" rows="20"></textarea>
+          <br><small>Cada renglón es un participante</small>
         </div>
     </div>
 
     <div v-if="typeSource === 'external'" class="form-item">
-      <label>External JSON URL</label>
-      <input type="text" v-model="url" placeholder="Type your JSON url address">
-      <small>Type your external source of contestants (JSON format)</small>
+      <label>JSON URL Externa</label>
+      <input type="text" v-model="url" placeholder="Escribe la url del json">
+      <small>Escribe la fuente externa de participantes en formato JSON)</small>
     </div>
 
     <div class="error" v-if="errors.source.length">{{ errors.source }}</div>
     <div class="success" v-if="validate">{{ submitMessage }}</div>
     <br>
 
-    <button class="btn btn-stop" @click="save">Save settings</button>
+    <button class="btn btn-stop" @click="save">Guardar</button>
   </div>
 </template>
 

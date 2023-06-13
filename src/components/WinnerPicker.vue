@@ -2,7 +2,7 @@
   <div class="pickerContent">
 
     <div class="section">
-      <span>Winner Picker</span>
+      <h1 @click="reset">Selección de ganadores al azar</h1>
       <!-- Title of competition -->
       <h1>{{title}}</h1>
     </div>
@@ -12,53 +12,61 @@
       <div v-if="description" class="picker-description">{{ description }}</div>
     </div>
 
-    <!-- Section button action  -->
-    <div class="section">
-      <button class="btn btn-start" @click="start"><span v-show="!startState">Start</span>
-      <span v-show="startState">Again</span> </button>
-      <button class="btn btn-stop" @click="stop">Pick winner</button>
-      <button class="btn btn-reset" @click="reset">Reset</button>
-      <div id="message" v-show="message">{{ message }}</div>
-    </div>
 
     <div class="section">
-      <h3>List of contestants</h3>
-      <small>* every selected contestant who becomes a winner is only once in the draw, in the next draw he is no longer in the list of contestants</small>
+      <h3>Lista de participantes</h3>
+      <span>* Cuando un participante resulta ganador es por única ocasión, en la siguiente rifa no podrá ser elegido nuevamente</span>
     </div>
 
     <div class="clearfix">
       <div class="pull-left">
         <div id="contestants">
-        <h2>The contestants:</h2>
+        <h2>Los participantes:</h2>
           <!-- List of contestants -->
           <ul v-if="contestants.length">
-            <li v-if="!contestants.length">Loading data...</li>
+            <li v-if="!contestants.length">Cargando datos...</li>
             <li  v-for="(item, index) of contestants" :key="index">{{ index + 1 }}.{{ item }}</li>
           </ul>
           <!-- Loading data message -->
           <ul v-if="!contestants.length">
-            <li>Loading data...</li>
+            <li>Cargando datos...</li>
           </ul>
         </div>
       </div>
 
       <div class="pull-left">
         <div id="winners" >
-          <h2>The winners:</h2>
+          <h2>Los ganadores seleccionados:</h2>
           <!-- List of pick winners -->
           <h3 v-show="winners.length" v-for="(winner, index) of winners" :key="index">{{ index + 1 }}. {{ winner }}</h3>
         </div>
       </div>
       <!-- Roller to show potential winner -->
-      <div id="panel"><span v-if="name">{{ name }}</span> <span class="empty" v-if="!name">The winner is...</span></div>
+      <div id="panel">
+        <span v-if="name">{{ name }}</span> <span class="empty" v-if="!name">El ganador es...</span>
+      </div>
     </div>
+    <!-- Section button action  -->
+    <div class="section" style="text-align: center!important">
+      <button class="btn btn-start" @click="start" v-show="!startState">Echar la suerte</button>
+      <!-- <span v-show="startState">...</span> </button> -->
+      <button class="btn btn-stop" v-show="startState" @click="stop">
+        Elegir ganador
+      </button>
+      <!-- <button class="btn btn-reset" @click="reset">Reiniciar</button> -->
+      <div id="message" v-show="message">{{ message }}</div>
+    </div>
+    <confetti-canon ref="cannon"/>
   </div>
 </template>
 
 <script>
 
+import ConfettiCanon from '@/components/ConfettiCanon.vue'
+
 export default {
   name: "WinnerPicker",
+  components: { ConfettiCanon },
   data: function() {
     return {
       url: '',
@@ -106,12 +114,11 @@ export default {
           i = 0
         }else{
           i++
-        } 
+        }
       }, 1);
     },
     //get the winner of cycle
     stop: function() {
-
       if (!this._isFilled()) {
         return;
       }
@@ -136,12 +143,16 @@ export default {
       }
       this.startState = false;
       this.stopState = true;
+      this.$refs["cannon"].show()
     },
     // reset all data
     reset: function() {
       this.name = null;
+      this.originalName = null;
       this.message = null;
       this.winners = [];
+      this.winnerIndex = 0;
+      this.nameIndex = 0
       this.startState = false;
       this.stopState = false;
       this.getSetting()
@@ -151,7 +162,7 @@ export default {
     getSetting(){
       if(localStorage.getItem('setting') !== null) {
         let setting = JSON.parse(localStorage.getItem('setting'))
-        
+
         this.title = setting.title
         this.description = setting.description
         this.url = setting.url
@@ -175,11 +186,11 @@ export default {
     // check contestants list
     _isFilled: function() {
       if (!this.contestants.length) {
-        this.message = "List of contestants is empty!";
+        this.message = "La lista de participantes esta vacía!";
         return false;
       }
       if(this.contestants.length == 1) {
-        this.message = "Contestants must be more then one!";
+        this.message = "Debe haber mas de 1 participante para poder hacer la selección de ganador";
         return false;
       }
       this.message = null;
@@ -213,11 +224,11 @@ textarea.list {
   padding: 15px;
 }
 #panel {
-  width: 350px;
+  width: 500px;
   min-height: 30px;
   position: absolute;
   top:400px;
-  right:120px;
+  right:100px;
   text-align: center;
   padding: 10px;
   background-color: #fff;

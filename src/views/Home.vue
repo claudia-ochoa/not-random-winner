@@ -1,7 +1,7 @@
 <template>
   <div class="main container">
     <WinnerPicker />
-    <small class="freepik"><a href="https://www.freepik.com/" target="_blank">Image source - www.freepik.com</a></small>
+    <small class="freepik"><a href="https://www.freepik.com/" target="_blank"></a></small>
   </div>
 </template>
 
